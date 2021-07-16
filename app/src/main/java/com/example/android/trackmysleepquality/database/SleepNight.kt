@@ -26,10 +26,10 @@ data class SleepNight(
     var nightId: Long = 0L,
 
     @ColumnInfo(name = "start_time_milli")
-    val startTimer: Long = System.currentTimeMillis(),
+    val startTimeMilli: Long = System.currentTimeMillis(),
 
     @ColumnInfo(name = "end_time_millli")
-    var endTimer: Long = startTimer,
+    var endTimeMilli: Long = startTimeMilli,
 
     @ColumnInfo(name = "quality_rating")
     val sleepQuality: Int = -1
