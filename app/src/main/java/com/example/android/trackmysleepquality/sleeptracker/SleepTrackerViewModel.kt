@@ -17,8 +17,11 @@
 package com.example.android.trackmysleepquality.sleeptracker
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.*
 import com.example.android.trackmysleepquality.database.SleepDatabaseDao
+import com.example.android.trackmysleepquality.database.SleepNight
+import com.example.android.trackmysleepquality.formatNights
+import kotlinx.coroutines.launch
 
 /**
  * ViewModel for SleepTrackerFragment.
@@ -26,5 +29,89 @@ import com.example.android.trackmysleepquality.database.SleepDatabaseDao
 class SleepTrackerViewModel(
         val database: SleepDatabaseDao,
         application: Application) : AndroidViewModel(application) {
+
+        private val _navigateToSleepQuality = MutableLiveData<SleepNight>()
+        val navigateToSleepQuality: LiveData<SleepNight> = _navigateToSleepQuality
+
+        private val nights = database.getAllNights()
+        val nightString = Transformations.map(nights) { nights->
+                formatNights(nights, application.resources)
+        }
+
+        private var tonight = MutableLiveData<SleepNight?>()
+
+        init {
+            initalizeTonight()
+        }
+
+        fun doneNavigating() {
+                _navigateToSleepQuality.value = null
+        }
+
+        /**
+         * Here coroutine is used as this function is doing dataBase operation [Long-running task]
+         *
+         * Originally [getTonightFromDatabase] function dose dataBase operation, but
+         * [getTonightFromDatabase] function is called inside this function, that means
+         * dataBase operation is done via this fundtion.
+         */
+        private fun initalizeTonight() {
+                viewModelScope.launch {
+                        tonight.value = getTonightFromDatabase()
+                }
+        }
+
+        private suspend fun getTonightFromDatabase(): SleepNight? {
+                var night = database.getTonight()
+                if (night?.startTimeMilli != night?.endTimeMilli) {
+                        night = null
+                }
+                return night
+        }
+
+        /**
+         * Below 6 methods are used as click handlers for buttons in our app.
+         */
+        fun onStartTracking() {
+                viewModelScope.launch {
+                        val newNight = SleepNight()
+                        insert(newNight)
+                        tonight.value = getTonightFromDatabase()
+                }
+        }
+
+        private suspend fun insert(night: SleepNight) {
+                database.insert(night)
+        }
+
+
+        fun onStoptrackung() {
+                viewModelScope.launch {
+                        val oldNight = tonight.value ?: return@launch
+                        oldNight.endTimeMilli = System.currentTimeMillis()
+
+                        _navigateToSleepQuality.value = oldNight
+
+                        update(oldNight)
+                }
+        }
+
+        private suspend fun update(night: SleepNight) {
+                database.update(night)
+        }
+
+        fun onClear() {
+                viewModelScope.launch {
+                        clear()
+                        tonight.value = null
+                }
+        }
+
+        private suspend fun clear() {
+                database.clear()
+        }
+        /**
+         * Click handler methods end here.
+         */
 }
 

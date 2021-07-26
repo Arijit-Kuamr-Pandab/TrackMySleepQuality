@@ -22,7 +22,7 @@ import androidx.room.Entity
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [SleepNight::class], version = 1,exportSchema = false)
+@Database(entities = [SleepNight::class], version = 1, exportSchema = false)
 abstract class SleepDatabase: RoomDatabase() {
 
     abstract val sleepDatabaseDao: SleepDatabaseDao
@@ -33,8 +33,8 @@ abstract class SleepDatabase: RoomDatabase() {
         private var INSTANCE: SleepDatabase? = null
 
         fun getInstance(context: Context): SleepDatabase {
-            synchronized(this) {
 
+            synchronized(this) {
                 var instance = INSTANCE
 
                 if (instance == null) {
