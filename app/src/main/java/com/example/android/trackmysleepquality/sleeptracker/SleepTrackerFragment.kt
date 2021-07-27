@@ -74,7 +74,7 @@ class SleepTrackerFragment : Fragment() {
         val sleepModelFactory = ViewModelProvider(this, viewModelFactory).get(SleepTrackerViewModel::class.java)
 
         /**
-         * Navigating
+         * Navigating to sleep quality fragment using LiveData.
          */
         sleepModelFactory.navigateToSleepQuality.observe(viewLifecycleOwner, Observer { night ->
             night?.let {
