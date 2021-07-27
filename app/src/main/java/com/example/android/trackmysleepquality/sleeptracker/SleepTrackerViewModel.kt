@@ -18,6 +18,7 @@ package com.example.android.trackmysleepquality.sleeptracker
 
 import android.app.Application
 import androidx.lifecycle.*
+import androidx.recyclerview.widget.DiffUtil
 import com.example.android.trackmysleepquality.database.SleepDatabaseDao
 import com.example.android.trackmysleepquality.database.SleepNight
 import com.example.android.trackmysleepquality.formatNights
@@ -31,14 +32,21 @@ class SleepTrackerViewModel(
         application: Application) : AndroidViewModel(application) {
 
         private val _navigateToSleepQuality = MutableLiveData<SleepNight>()
+
         val navigateToSleepQuality: LiveData<SleepNight> = _navigateToSleepQuality
+
+        private var tonight = MutableLiveData<SleepNight?>()
 
         private val nights = database.getAllNights()
         val nightString = Transformations.map(nights) { nights->
                 formatNights(nights, application.resources)
         }
 
-        private var tonight = MutableLiveData<SleepNight?>()
+        /**
+         * This variable showSnackBarEvent is used for showing snack bar.
+         */
+        private var _showSnackbarEvent = MutableLiveData<Boolean>()
+        var showSnackbarEvent: LiveData<Boolean> = _showSnackbarEvent
 
         init {
             initalizeTonight()
@@ -77,6 +85,7 @@ class SleepTrackerViewModel(
                         val newNight = SleepNight()
                         insert(newNight)
                         tonight.value = getTonightFromDatabase()
+
                 }
         }
 
@@ -112,6 +121,23 @@ class SleepTrackerViewModel(
         }
         /**
          * Click handler methods end here.
+         */
+
+
+        /**
+         * Below three variables are used for setting visibility  of buttons.
+         */
+        val startButtonVisible = Transformations.map(tonight) {
+                it == null
+        }
+        val stopButtonVisible = Transformations.map(tonight) {
+                it != null
+        }
+        val clearButtonVisible = Transformations.map(nights) {
+                it?.isNotEmpty()
+        }
+        /**
+         * Visibility variables ends here.
          */
 }
 

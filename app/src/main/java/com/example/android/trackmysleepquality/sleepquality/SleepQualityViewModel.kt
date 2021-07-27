@@ -27,10 +27,18 @@ class SleepQualityViewModel(private val sleepNightKey: Long = 0L, val database: 
     private val _navigateToSleepTracker = MutableLiveData<Boolean?>()
     val navigateToSleepTracker : LiveData<Boolean?> = _navigateToSleepTracker
 
+    /**
+     * Once the navigation is done, this function will set the value of
+     * navigation variable to null.
+     */
     fun doneNavigating() {
         _navigateToSleepTracker.value = null
     }
 
+    /**
+     * This function will set different numbers of different faces of quality fragment layout
+     * to sleep quality column of entity SleepNight.kt
+     */
     fun onSetSleepQuality(quality: Int) {
         viewModelScope.launch {
             val toNight = database.get(sleepNightKey) ?: return@launch

@@ -53,16 +53,16 @@ class SleepQualityFragment : Fragment() {
                 inflater, R.layout.fragment_sleep_quality, container, false)
 
         val application = requireNotNull(this.activity).application
-
         val arguments = SleepQualityFragmentArgs.fromBundle(requireArguments())
         val dataSource = SleepDatabase.getInstance(application).sleepDatabaseDao
-
         val viewModelFactory = SleepQualityViewModelFactory(arguments.sleepNightKey, dataSource)
-
         val viewModel = ViewModelProvider(this, viewModelFactory).get(SleepQualityViewModel::class.java)
 
         binding.sleepQualityViewModel = viewModel
 
+        /**
+         * Navigating from actionSleepQualityFragmen to SleepTrackerFragment.
+         */
         viewModel.navigateToSleepTracker.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 this.findNavController().navigate(SleepQualityFragmentDirections.actionSleepQualityFragmentToSleepTrackerFragment())
