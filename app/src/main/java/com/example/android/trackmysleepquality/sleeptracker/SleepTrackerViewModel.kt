@@ -113,6 +113,7 @@ class SleepTrackerViewModel(
                 viewModelScope.launch {
                         clear()
                         tonight.value = null
+                        _showSnackbarEvent.value = true
                 }
         }
 
@@ -139,5 +140,12 @@ class SleepTrackerViewModel(
         /**
          * Visibility variables ends here.
          */
+
+        /**
+         * This doneShowingSnackbar function is used for snack bar's visibility.
+         */
+        fun doneShowingSnackbar() {
+                _showSnackbarEvent.value = false
+        }
 }
 
