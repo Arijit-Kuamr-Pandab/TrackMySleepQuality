@@ -24,6 +24,7 @@ import com.example.android.trackmysleepquality.database.SleepDatabaseDao
 import kotlinx.coroutines.launch
 
 class SleepQualityViewModel(private val sleepNightKey: Long = 0L, val database: SleepDatabaseDao) : ViewModel() {
+
     private val _navigateToSleepTracker = MutableLiveData<Boolean?>()
     val navigateToSleepTracker : LiveData<Boolean?> = _navigateToSleepTracker
 

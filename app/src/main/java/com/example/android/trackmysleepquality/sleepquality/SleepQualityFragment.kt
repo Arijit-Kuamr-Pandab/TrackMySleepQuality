@@ -64,6 +64,12 @@ class SleepQualityFragment : Fragment() {
          * Navigating from actionSleepQualityFragmen to SleepTrackerFragment.
          */
         viewModel.navigateToSleepTracker.observe(viewLifecycleOwner, Observer {
+            /**
+             * Checking wheather the value of navigation variable is null or not.
+             *
+             * If the value is null then it will not navigate,
+             * otherwise it will navigate.
+             */
             if (it == true) {
                 this.findNavController().navigate(SleepQualityFragmentDirections.actionSleepQualityFragmentToSleepTrackerFragment())
                 viewModel.doneNavigating()

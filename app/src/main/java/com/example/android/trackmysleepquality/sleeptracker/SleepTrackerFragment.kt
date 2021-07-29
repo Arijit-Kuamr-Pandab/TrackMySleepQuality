@@ -72,12 +72,17 @@ class SleepTrackerFragment : Fragment() {
          */
         val sleepTrackerViewModel = ViewModelProvider(this, viewModelFactory).get(SleepTrackerViewModel::class.java)
 
-        val sleepModelFactory = ViewModelProvider(this, viewModelFactory).get(SleepTrackerViewModel::class.java)
-
         /**
          * Navigating to sleep quality fragment using LiveData.
          */
-        sleepModelFactory.navigateToSleepQuality.observe(viewLifecycleOwner, Observer { night ->
+        sleepTrackerViewModel.navigateToSleepQuality.observe(viewLifecycleOwner, Observer { night ->
+
+            /**
+             * Checking wheather the night is null or not.
+             *
+             * If the night is null then it will not navigate,
+             * otherwise it will navigate.
+             */
             night?.let {
                 this.findNavController().navigate(
                     SleepTrackerFragmentDirections
@@ -92,7 +97,7 @@ class SleepTrackerFragment : Fragment() {
          *
          * The variable is of type LiveData.
          */
-        sleepTrackerViewModel.showSnackbarEvent.observe(this, Observer {
+        sleepTrackerViewModel.showSnackbarEvent.observe(viewLifecycleOwner, Observer {
             if (it == true){ // Observed state is true.
                 Snackbar.make(
                     requireActivity().findViewById(android.R.id.content),
