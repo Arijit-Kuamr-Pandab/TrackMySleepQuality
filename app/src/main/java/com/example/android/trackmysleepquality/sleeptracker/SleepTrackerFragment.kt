@@ -46,6 +46,8 @@ class SleepTrackerFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
+        val mAdapter = SleepNightAdapter()
+
         /**
          * Get a reference to the binding object and inflate the fragment views.
          */
@@ -91,6 +93,12 @@ class SleepTrackerFragment : Fragment() {
             }
         })
 
+        sleepTrackerViewModel.nights.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                mAdapter.data = it
+            }
+        })
+
         /**
          * The below code is observing the snackbar variable and
          * displaying the snakbar.
@@ -115,6 +123,8 @@ class SleepTrackerFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
             viewModel = sleepTrackerViewModel
         }
+
+        binding.sleepList.adapter = mAdapter
 
         return binding.root
     }

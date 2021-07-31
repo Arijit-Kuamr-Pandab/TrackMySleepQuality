@@ -39,6 +39,7 @@
              RecyclerView in a later lesson. -->
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/sleepList"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/clear_button"
