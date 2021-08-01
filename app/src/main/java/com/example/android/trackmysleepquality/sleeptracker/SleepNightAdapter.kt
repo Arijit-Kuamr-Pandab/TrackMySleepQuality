@@ -1,26 +1,38 @@
 package com.example.android.trackmysleepquality.sleeptracker
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackmysleepquality.R
 import com.example.android.trackmysleepquality.convertDurationToFormatted
 import com.example.android.trackmysleepquality.convertNumericQualityToString
 import com.example.android.trackmysleepquality.database.SleepNight
+import com.example.android.trackmysleepquality.databinding.ListItemSleepNightBinding
 import com.example.android.trackmysleepquality.sleeptracker.SleepNightAdapter.SleepViewHolder.Companion.from
 
-class SleepNightAdapter : RecyclerView.Adapter<SleepNightAdapter.SleepViewHolder>() {
+/**
+ * Adapter class is extending  ListAdapter class instead of Adapter class because,
+ * ListAdapter, that helps you build a RecyclerView adapter that's backed by a list.
+ * ListAdapter keeps track of the list for you and notifies the adapter when the list is updated.
+ *
+ * It needs a DiffCallback() class as a parameter to the constructor, to check the difference between
+ * two lists, i.e Old and New.
+ *
+ * There is no need of getItemCount() method anymore, because the ListAdapter implements this method for you.
+ */
+class SleepNightAdapter : ListAdapter<SleepNight,SleepNightAdapter.SleepViewHolder>(SleepNightDiffCallBack()) {
 
     /**
      * ViewHolder class should contain all the codes that deal with layout or views.
      */
-    class SleepViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val sleepLength: TextView = itemView.findViewById(R.id.sleep_length)
-        val quality: TextView = itemView.findViewById(R.id.quality_string)
-        val qualityImage: ImageView = itemView.findViewById(R.id.quality_image)
+    class SleepViewHolder private constructor(binding: ListItemSleepNightBinding) : RecyclerView.ViewHolder(binding.root) {
+        val sleepLength: TextView = binding.sleepLength
+        val quality: TextView = binding.qualityString
+        val qualityImage: ImageView = binding.qualityImage
 
         /**
          * These functions are here because,
@@ -50,19 +62,27 @@ class SleepNightAdapter : RecyclerView.Adapter<SleepNightAdapter.SleepViewHolder
         companion object {
             fun from(parent: ViewGroup): SleepViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val view = layoutInflater.inflate(R.layout.list_item_sleep_night, parent, false)
-                return SleepViewHolder(view)
+                /**
+                 * Binding variable for reference of views in item layout.
+                 */
+                val binding = ListItemSleepNightBinding.inflate(layoutInflater, parent, false)
+                return SleepViewHolder(binding)
             }
         }
     }
 
     /**
-     * This is the data inside our Adapter.
+     *  DiffUtil is used for calculating the differences between two lists.
+     *  DiffUtil takes an old list and a new list and figures out what's different
      */
-    var data = listOf<SleepNight>()
-    set (value) {
-        field = value
-        notifyDataSetChanged()
+    class SleepNightDiffCallBack: DiffUtil.ItemCallback<SleepNight>() {
+        override fun areItemsTheSame(oldItem: SleepNight, newItem: SleepNight): Boolean {
+            return oldItem.nightId == newItem.nightId
+        }
+
+        override fun areContentsTheSame(oldItem: SleepNight, newItem: SleepNight): Boolean {
+            return oldItem == newItem
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SleepViewHolder {
@@ -73,7 +93,10 @@ class SleepNightAdapter : RecyclerView.Adapter<SleepNightAdapter.SleepViewHolder
     }
 
     override fun onBindViewHolder(holder: SleepViewHolder, position: Int) {
-        val item = data[position]
+        /**
+         * It will give you the item.
+         */
+        val item = getItem(position)
 
         /**
          * This bind function is inside viewHolder class as it deals with views.
@@ -81,7 +104,4 @@ class SleepNightAdapter : RecyclerView.Adapter<SleepNightAdapter.SleepViewHolder
         holder.bind(item)
     }
 
-    override fun getItemCount(): Int {
-        return data.size
-    }
 }

@@ -78,7 +78,6 @@ class SleepTrackerFragment : Fragment() {
          * Navigating to sleep quality fragment using LiveData.
          */
         sleepTrackerViewModel.navigateToSleepQuality.observe(viewLifecycleOwner, Observer { night ->
-
             /**
              * Checking wheather the night is null or not.
              *
@@ -95,7 +94,7 @@ class SleepTrackerFragment : Fragment() {
 
         sleepTrackerViewModel.nights.observe(viewLifecycleOwner, Observer {
             it?.let {
-                mAdapter.data = it
+                mAdapter.submitList(it)
             }
         })
 
