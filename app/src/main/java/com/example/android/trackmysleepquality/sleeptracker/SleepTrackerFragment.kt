@@ -27,6 +27,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackmysleepquality.R
 import com.example.android.trackmysleepquality.database.SleepDatabase
 import com.example.android.trackmysleepquality.databinding.FragmentSleepTrackerBinding
@@ -126,7 +128,10 @@ class SleepTrackerFragment : Fragment() {
             viewModel = sleepTrackerViewModel
         }
 
-        binding.sleepList.adapter = mAdapter
+        binding.sleepList.apply {
+            adapter = mAdapter
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        }
 
         return binding.root
     }

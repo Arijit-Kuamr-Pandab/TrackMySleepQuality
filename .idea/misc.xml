@@ -3,13 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/user/StudioProjects/TrackMySleepQuality/app/src/main/res/layout/fragment_sleep_detail.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/user/StudioProjects/TrackMySleepQuality/app/src/main/res/layout/fragment_sleep_tracker.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/user/StudioProjects/TrackMySleepQuality/app/src/main/res/layout/list_item_sleep_night.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/user/StudioProjects/TrackMySleepQuality/app/src/main/res/layout/text_item_view.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_15" project-jdk-name="15" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_15_PREVIEW" project-jdk-name="15" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
